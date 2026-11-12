@@ -33,8 +33,12 @@ source "${SCRIPT_DIR}/lib/common.sh"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-has_project_tag() { # $1 = space-separated "Key=Value" list -> true if Project matches
-  [[ " $1 " == *" Project=${PROJECT} "* ]]
+has_project_tag() { # $1 = "Key=Value" list -> true if Project matches
+  # `aws --output text` separates list items with TABs, so turn all whitespace
+  # into single spaces before matching the whole word " Project=<name> ".
+  local tags
+  tags=" $(printf '%s' "$1" | tr -s '[:space:]' ' ') "
+  [[ "$tags" == *" Project=${PROJECT} "* ]]
 }
 
 step "Pre-flight"

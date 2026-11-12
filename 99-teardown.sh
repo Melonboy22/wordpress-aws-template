@@ -140,7 +140,7 @@ for sg_name in "$DB_SG_NAME" "$WEB_SG_NAME"; do
   # Network interfaces of deleted RDS/EC2 can take a minute to disappear, and
   # until then AWS answers DependencyViolation -> retry for up to 5 minutes.
   for attempt in $(seq 1 30); do
-    if aws ec2 delete-security-group --group-id "$SG_ID" 2>"${TMP_DIR}/sg.err"; then
+    if aws ec2 delete-security-group --group-id "$SG_ID" >/dev/null 2>"${TMP_DIR}/sg.err"; then
       ok "deleted ${sg_name} (${SG_ID})"; break
     fi
     grep -q DependencyViolation "${TMP_DIR}/sg.err" || die "$(cat "${TMP_DIR}/sg.err")"

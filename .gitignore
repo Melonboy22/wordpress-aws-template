@@ -1,0 +1,12 @@
+# Your settings, secrets and machine-specific state - never commit these
+config.env
+state.env
+*.pem
+
+# Database dumps
+*.sql
+*.sql.gz
+dumps/
+
+# macOS
+.DS_Store
